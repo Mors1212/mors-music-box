@@ -56,7 +56,7 @@ To update later: **Extensions → Manage extensions → Update** next to Mors's 
 4. *(Optional)* Under **ตั้งค่าการ์ด** (Card settings), set the label shown after "NOW PLAYING", the handwritten line under the controls, and a theme for this card.
 5. Tap **Save to Card**.
 
-> The player and playlist editor are currently in Thai. An English version is planned.
+
 
 ### Which links work?
 
@@ -80,8 +80,10 @@ You can create your own theme without leaving SillyTavern: tap **+** in the pane
 * the record (use your own picture, hide the grooves or the avatar)
 * the tone arm (remove it or replace it with your own picture)
 
-Full reference with a labelled diagram: **[THEME-GUIDE.md](THEME-GUIDE.md)**
+Full reference with a labelled diagram: **[THEME-GUIDE.md](THEME-GUIDE.md)** or **[THEME-GUIDE-TH.md](THEME-GUIDE.th.md)**
+
 Ready-made examples to import: **[theme-samples/](theme-samples)**
+
 
 If you choose an imported theme as a card's theme, the theme is saved into the card too, so anyone who loads the card sees it.
 

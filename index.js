@@ -70,7 +70,147 @@ const DEFAULTS = {
   shuffle: false,
   repeat: 'all', // all | one | off
   customThemes: {}, // id -> theme object (imported JSON)
+  lang: null, // 'th' | 'en' | null = follow SillyTavern's language
 };
+
+/* ---------- language (TH / EN) ---------- */
+
+const I18N = {
+  th: {
+    themeToast: 'ธีม: {name}',
+    noWriteField: 'SillyTavern เวอร์ชันนี้ไม่มี writeExtensionField ลองอัปเดต ST',
+    cantPlay: 'เล่นไม่ได้: {title} — ลิงก์อาจไม่ใช่ลิงก์ไฟล์ตรง',
+    tapPlay: 'แตะปุ่ม ▶ เพื่อเริ่มเล่น',
+    themeBtnTitle: 'แตะเพื่อสลับธีม · กดค้างเพื่อเลือก',
+    langBtnTitle: 'เปลี่ยนภาษา (English)',
+    editTitle: 'แก้เพลย์ลิสต์',
+    closeTitle: 'ปิด',
+    back: 'กลับ',
+    noSongs: 'ยังไม่มีเพลง',
+    noSongsHint: 'แตะ ✎ มุมขวาบนเพื่อเพิ่มเพลงให้บอทตัวนี้',
+    openChatFirst: 'เปิดแชทกับบอทก่อนนะ',
+    addSong: 'เพิ่มเพลง',
+    pasteMany: 'วางหลายเพลงทีเดียว',
+    onePerLine: 'หนึ่งบรรทัดต่อหนึ่งเพลง',
+    addToList: 'เพิ่มลงลิสต์',
+    cardSettings: 'ตั้งค่าการ์ด',
+    tagLabel: 'ป้ายหลัง NOW PLAYING',
+    tagPh: 'เช่น VOL.03',
+    signLabel: 'ข้อความลายมือด้านล่าง',
+    cardTheme: 'ธีมประจำการ์ด',
+    cardThemeNone: 'ไม่กำหนด (ใช้ธีมของผู้เล่น)',
+    inCard: '(ในการ์ด)',
+    cardThemeHint: 'ถ้าเลือกธีมที่ Import มาเอง ตัวธีมจะถูกฝังไปในการ์ดด้วย คนที่โหลดการ์ดไปจะเห็นธีมเดียวกัน',
+    cancel: 'ยกเลิก',
+    titlePh: 'ชื่อเพลง',
+    artistPh: 'ศิลปิน (ไม่ใส่ก็ได้)',
+    urlPh: 'https://… ลิงก์ไฟล์เสียงตรง',
+    moveUp: 'ขึ้น',
+    moveDown: 'ลง',
+    remove: 'ลบ',
+    importedSongs: 'เพิ่ม {n} เพลงจากไฟล์แล้ว (กด Save to Card เพื่อบันทึก)',
+    badPlaylistFile: 'อ่านไฟล์ไม่ได้ ต้องเป็น JSON ที่มี tracks',
+    bulkFormat: 'ใส่แบบ ชื่อเพลง | ลิงก์ ทีละบรรทัด (ลิงก์ขึ้นต้นด้วย http)',
+    badLinks: 'มีลิงก์ที่ไม่ได้ขึ้นต้นด้วย http/https',
+    savedCard: 'บันทึก {n} เพลงลงการ์ด {name} แล้ว',
+    saveFailed: 'บันทึกไม่สำเร็จ: {err}',
+    badJson: 'JSON ไม่ถูกต้อง: {err}',
+    oneThemeOnly: 'ต้องเป็น { … } หนึ่งธีม',
+    badTheme: 'อ่านธีมไม่ได้',
+    editThemeH: 'แก้ไขธีม: {name}',
+    newThemeH: 'สร้างธีมใหม่',
+    themeHint: 'กรอกเฉพาะช่องที่อยากเปลี่ยน ช่องที่เว้นว่าง ("") จะใช้ค่าพื้นฐาน · ความหมายแต่ละค่าดูใน THEME-GUIDE.md · ตัดแขนเข็ม "stylus": false',
+    themeSaved: 'บันทึกธีม {name} แล้ว',
+    themeCreated: 'สร้างธีม {name} แล้ว',
+    builtinNoEdit: 'ธีมตั้งต้นแก้ไม่ได้ กด + เพื่อสร้างธีมใหม่',
+    builtinNoDelete: 'ธีมตั้งต้นลบไม่ได้',
+    confirmDelete: 'ลบธีม "{name}" ?',
+    themeDeleted: 'ลบธีม {name} แล้ว',
+    themeAdded: 'เพิ่มธีม {name} แล้ว',
+    badThemeFile: 'อ่านไฟล์ธีมไม่ได้',
+    loadFailed: 'โหลดปุ่มไม่สำเร็จ: {err}',
+  },
+  en: {
+    themeToast: 'Theme: {name}',
+    noWriteField: "This SillyTavern version doesn't support writeExtensionField. Please update ST.",
+    cantPlay: "Can't play: {title} — the link may not be a direct audio file.",
+    tapPlay: 'Tap ▶ to start playing',
+    themeBtnTitle: 'Tap to switch theme · press and hold to choose',
+    langBtnTitle: 'Change language (ภาษาไทย)',
+    editTitle: 'Edit playlist',
+    closeTitle: 'Close',
+    back: 'Back',
+    noSongs: 'No songs yet',
+    noSongsHint: "Tap ✎ in the top-right corner to add songs for this bot",
+    openChatFirst: 'Open a chat with a bot first',
+    addSong: 'Add song',
+    pasteMany: 'Paste many songs',
+    onePerLine: 'One song per line',
+    addToList: 'Add to list',
+    cardSettings: 'Card settings',
+    tagLabel: 'Label after NOW PLAYING',
+    tagPh: 'e.g. VOL.03',
+    signLabel: 'Handwritten line at the bottom',
+    cardTheme: "Card's theme",
+    cardThemeNone: "None (use the player's theme)",
+    inCard: '(in card)',
+    cardThemeHint: "If you pick a theme you imported, the whole theme is saved into the card, so anyone who loads the card sees it too.",
+    cancel: 'Cancel',
+    titlePh: 'Song title',
+    artistPh: 'Artist (optional)',
+    urlPh: 'https://… direct audio link',
+    moveUp: 'Move up',
+    moveDown: 'Move down',
+    remove: 'Remove',
+    importedSongs: 'Added {n} songs from the file (tap Save to Card to keep them)',
+    badPlaylistFile: "Couldn't read the file. It must be JSON with tracks.",
+    bulkFormat: 'Use one line per song: Title | link (the link must start with http)',
+    badLinks: "Some links don't start with http/https",
+    savedCard: 'Saved {n} songs to {name}',
+    saveFailed: 'Save failed: {err}',
+    badJson: 'Invalid JSON: {err}',
+    oneThemeOnly: 'Must be one theme: { … }',
+    badTheme: "Couldn't read this theme",
+    editThemeH: 'Edit theme: {name}',
+    newThemeH: 'New theme',
+    themeHint: 'Fill in only what you want to change. Blank ("") uses the default · See THEME-GUIDE.md for what each value does · Remove the tone arm with "stylus": false',
+    themeSaved: 'Saved theme {name}',
+    themeCreated: 'Created theme {name}',
+    builtinNoEdit: "Built-in themes can't be edited. Tap + to make a new one.",
+    builtinNoDelete: "Built-in themes can't be deleted",
+    confirmDelete: 'Delete theme "{name}"?',
+    themeDeleted: 'Deleted theme {name}',
+    themeAdded: 'Added theme {name}',
+    badThemeFile: "Couldn't read the theme file",
+    loadFailed: 'Failed to load the button: {err}',
+  },
+};
+
+/** Current language: the player's own choice, otherwise SillyTavern's language, otherwise the browser's. */
+function lang() {
+  let s = null;
+  try { s = settings().lang; } catch (e) { /* not ready */ }
+  if (s === 'th' || s === 'en') return s;
+  let guess = '';
+  try { guess = localStorage.getItem('language') || ''; } catch (e) { /* ignore */ }
+  if (!guess) guess = navigator.language || '';
+  return /^th/i.test(guess) ? 'th' : 'en';
+}
+
+/** Translate: t('savedCard', { n: 3, name: 'Karl' }) */
+function t(key, vars) {
+  const table = I18N[lang()] || I18N.en;
+  let str = table[key] != null ? table[key] : (I18N.en[key] != null ? I18N.en[key] : key);
+  if (vars) Object.keys(vars).forEach((k) => { str = str.split(`{${k}}`).join(String(vars[k])); });
+  return str;
+}
+
+function toggleLang() {
+  const s = settings();
+  s.lang = lang() === 'th' ? 'en' : 'th';
+  save();
+  render();
+}
 
 /* ---------- state ---------- */
 
@@ -350,7 +490,7 @@ function cycleTheme() {
   s.theme = keys[(cur + 1) % keys.length];
   s.followCardTheme = false;
   save(); applyTheme(); syncSettingsUI();
-  toast('info', `ธีม: ${allThemes()[s.theme].name}`);
+  toast('info', t('themeToast', { name: allThemes()[s.theme].name }));
 }
 
 function openThemeMenu() {
@@ -409,7 +549,7 @@ async function writeCard(payload) {
   const c = ctx();
   const char = currentChar();
   if (!c || !char) throw new Error('No character chat open');
-  if (typeof c.writeExtensionField !== 'function') throw new Error('SillyTavern เวอร์ชันนี้ไม่มี writeExtensionField ลองอัปเดต ST');
+  if (typeof c.writeExtensionField !== 'function') throw new Error(t('noWriteField'));
   await c.writeExtensionField(c.characterId, CARD_KEY, payload);
   char.data = char.data || {};
   char.data.extensions = char.data.extensions || {};
@@ -483,9 +623,9 @@ function isPlaying() { return !!(audio && !audio.paused && audio.getAttribute('s
 
 function onAudioError() {
   if (!audio || !audio.getAttribute('src')) return;
-  const t = state.tracks[state.index];
+  const track = state.tracks[state.index];
   state.errors += 1;
-  toast('warning', `เล่นไม่ได้: ${t ? t.title : 'track'} — ลิงก์อาจไม่ใช่ลิงก์ไฟล์ตรง`);
+  toast('warning', t('cantPlay', { title: track ? track.title : 'track' }));
   if (state.errors >= state.tracks.length) { state.errors = 0; stop(); return; }
   setTimeout(() => next(true), 1200);
 }
@@ -583,7 +723,7 @@ function play(i) {
   }
   audio.volume = settings().volume;
   const p = audio.play();
-  if (p && p.catch) p.catch((err) => { if (err && err.name === 'NotAllowedError') toast('info', 'แตะปุ่ม ▶ เพื่อเริ่มเล่น'); });
+  if (p && p.catch) p.catch((err) => { if (err && err.name === 'NotAllowedError') toast('info', t('tapPlay')); });
   updateMediaSession();
   render();
 }
@@ -755,13 +895,7 @@ function resetButtonPosition() {
   if (!document.getElementById('mmb-btn') && settings().enabled) mountButton();
   placeButton(true);
   const btn = document.getElementById('mmb-btn');
-  const out = document.getElementById('mmb-set-diag');
-  if (btn && out) {
-    const r = btn.getBoundingClientRect();
-    const v = getViewport();
-    const cs = getComputedStyle(btn);
-    out.textContent = `ปุ่ม x${Math.round(r.left)} y${Math.round(r.top)} ${Math.round(r.width)}×${Math.round(r.height)} · จอ ${Math.round(v.w)}×${Math.round(v.h)} · display:${cs.display} vis:${cs.visibility} op:${cs.opacity} z:${cs.zIndex}`;
-  }
+
 }
 
 /* ---------- overlay: list + player ---------- */
@@ -777,7 +911,8 @@ function mountOverlay() {
         <div class="mmb-topbar">
           <span class="mmb-brand">MORS'S MUSIC BOX</span>
           <span class="mmb-topbtns">
-            <button type="button" class="mmb-ghost mmb-theme-btn" data-act="theme" title="แตะเพื่อสลับธีม · กดค้างเพื่อเลือก">${ICON.palette}</button>
+            <button type="button" class="mmb-ghost mmb-lang-btn" data-act="lang"></button>
+            <button type="button" class="mmb-ghost mmb-theme-btn" data-act="theme">${ICON.palette}</button>
             <button type="button" class="mmb-ghost" data-act="edit" title="Edit playlist">${ICON.edit}</button>
             <button type="button" class="mmb-ghost" data-act="close" title="Close">${ICON.close}</button>
           </span>
@@ -799,7 +934,7 @@ function mountOverlay() {
       </section>
 
       <section class="mmb-view mmb-player-view">
-        <button type="button" class="mmb-back" data-act="back" aria-label="Back">${ICON.back}<span>Back</span></button>
+        <button type="button" class="mmb-back" data-act="back" aria-label="Back">${ICON.back}<span class="mmb-back-text">Back</span></button>
         <div class="mmb-music-content">
           <div class="mmb-vinyl-area">
             <div class="mmb-vinyl">
@@ -861,6 +996,7 @@ function mountOverlay() {
     else if (act === 'prev') prev();
     else if (act === 'edit') openEditor();
     else if (act === 'theme') cycleTheme();
+    else if (act === 'lang') toggleLang();
     else if (act === 'pick-theme') pickTheme(b.dataset.theme);
     else if (act === 'track') { play(Number(b.dataset.i)); setView('player'); }
     else if (act === 'shuffle') { settings().shuffle = !settings().shuffle; save(); state.nextIndex = null; if (isPlaying()) schedulePreload(); render(); }
@@ -974,13 +1110,23 @@ function render() {
   const ov = document.getElementById('mmb-overlay');
   if (!ov) { renderPlaying(); return; }
   const s = settings();
-  const t = state.tracks[state.index];
+  const cur = state.tracks[state.index];
   const hasChar = !!currentChar();
   ov.dataset.view = state.view;
 
   ov.querySelectorAll('.mmb-cover').forEach((img) => {
     if (img.getAttribute('src') !== state.avatar) img.setAttribute('src', state.avatar);
   });
+
+  // labels that follow the language
+  const L = lang();
+  const langBtn = ov.querySelector('.mmb-lang-btn');
+  langBtn.textContent = L.toUpperCase();
+  langBtn.title = t('langBtnTitle');
+  ov.querySelector('.mmb-theme-btn').title = t('themeBtnTitle');
+  ov.querySelector('[data-act="edit"]').title = t('editTitle');
+  ov.querySelector('[data-act="close"]').title = t('closeTitle');
+  ov.querySelector('.mmb-back-text').textContent = t('back');
 
   // list view
   ov.querySelector('.mmb-list-tag').textContent = `PLAYLIST • ${state.tracks.length} ${state.tracks.length === 1 ? 'TRACK' : 'TRACKS'}`;
@@ -995,17 +1141,17 @@ function render() {
           <span class="mmb-rt"><b>${esc(tr.title)}</b>${tr.artist ? `<small>${esc(tr.artist)}</small>` : ''}</span>
           <span class="mmb-row-eq"><i></i><i></i><i></i></span>
         </button>`).join('')
-    : `<div class="mmb-empty">${hasChar ? 'ยังไม่มีเพลง<br><small>แตะ ✎ มุมขวาบนเพื่อเพิ่มเพลงให้บอทตัวนี้</small>' : 'เปิดแชทกับบอทก่อนนะ'}</div>`;
+    : `<div class="mmb-empty">${hasChar ? `${t('noSongs')}<br><small>${t('noSongsHint')}</small>` : t('openChatFirst')}</div>`;
 
   const nowbar = ov.querySelector('.mmb-nowbar');
-  nowbar.hidden = !(t && audio && audio.getAttribute('src'));
-  ov.querySelector('.mmb-now-title').textContent = t ? t.title : '';
-  ov.querySelector('.mmb-now-artist').textContent = t ? (t.artist || state.charName) : '';
+  nowbar.hidden = !(cur && audio && audio.getAttribute('src'));
+  ov.querySelector('.mmb-now-title').textContent = cur ? cur.title : '';
+  ov.querySelector('.mmb-now-artist').textContent = cur ? (cur.artist || state.charName) : '';
 
   // player view
   ov.querySelector('.mmb-now-tag').textContent = `NOW PLAYING${state.card.tag ? ` • ${state.card.tag}` : ''}`;
-  ov.querySelector('.mmb-title').textContent = t ? t.title : '—';
-  ov.querySelector('.mmb-artist').textContent = t ? (t.artist || state.charName) : '';
+  ov.querySelector('.mmb-title').textContent = cur ? cur.title : '—';
+  ov.querySelector('.mmb-artist').textContent = cur ? (cur.artist || state.charName) : '';
   ov.querySelector('.mmb-sign').textContent = state.card.sign || 'on repeat forever...';
 
   const sh = ov.querySelector('[data-act="shuffle"]');
@@ -1046,7 +1192,7 @@ function renderProgress() {
 
 function openEditor() {
   const char = currentChar();
-  if (!char) { toast('info', 'เปิดแชทกับบอทก่อนนะ'); return; }
+  if (!char) { toast('info', t('openChatFirst')); return; }
   if (!state.open) togglePanel(true);
   const existing = document.getElementById('mmb-editor');
   if (existing) existing.remove();
@@ -1069,27 +1215,27 @@ function openEditor() {
       </div>
       <div class="mmb-ed-body">
         <div class="mmb-ed-rows"></div>
-        <button type="button" class="mmb-pill wide" data-ed="add">${ICON.plus} เพิ่มเพลง</button>
+        <button type="button" class="mmb-pill wide" data-ed="add">${ICON.plus} ${t('addSong')}</button>
 
         <details class="mmb-ed-box">
-          <summary>วางหลายเพลงทีเดียว</summary>
-          <p>หนึ่งบรรทัดต่อหนึ่งเพลง</p>
+          <summary>${t('pasteMany')}</summary>
+          <p>${t('onePerLine')}</p>
           <textarea rows="4" placeholder="Waltz in A minor | https://od.lk/s/test.mp3&#10;Richmond Nocturne | https://od.lk/s/test2.mp3"></textarea>
-          <button type="button" class="mmb-pill primary wide" data-ed="bulk">${ICON.plus} เพิ่มลงลิสต์</button>
+          <button type="button" class="mmb-pill primary wide" data-ed="bulk">${ICON.plus} ${t('addToList')}</button>
         </details>
 
         <details class="mmb-ed-box">
-          <summary>ตั้งค่าการ์ด</summary>
-          <label>ป้ายหลัง NOW PLAYING <input type="text" data-card="tag" maxlength="40" placeholder="เช่น VOL.03"></label>
-          <label>ข้อความลายมือด้านล่าง <input type="text" data-card="sign" maxlength="80" placeholder="on repeat forever..."></label>
-          <label>ธีมประจำการ์ด
+          <summary>${t('cardSettings')}</summary>
+          <label>${t('tagLabel')} <input type="text" data-card="tag" maxlength="40" placeholder="${esc(t('tagPh'))}"></label>
+          <label>${t('signLabel')} <input type="text" data-card="sign" maxlength="80" placeholder="on repeat forever..."></label>
+          <label>${t('cardTheme')}
             <select data-card="theme">
-              <option value="">ไม่กำหนด (ใช้ธีมของผู้เล่น)</option>
+              <option value="">${t('cardThemeNone')}</option>
               ${themeOptions}
-              ${themeKey === '__embedded' ? `<option value="__embedded">${esc((draftTheme && draftTheme.name) || 'Embedded theme')} (ในการ์ด)</option>` : ''}
+              ${themeKey === '__embedded' ? `<option value="__embedded">${esc((draftTheme && draftTheme.name) || 'Embedded theme')} ${t('inCard')}</option>` : ''}
             </select>
           </label>
-          <p class="mmb-hint">ถ้าเลือกธีมที่ Import มาเอง ตัวธีมจะถูกฝังไปในการ์ดด้วย คนที่โหลดการ์ดไปจะเห็นธีมเดียวกัน</p>
+          <p class="mmb-hint">${t('cardThemeHint')}</p>
         </details>
 
         <div class="mmb-ed-io">
@@ -1099,7 +1245,7 @@ function openEditor() {
         </div>
       </div>
       <div class="mmb-ed-foot">
-        <button type="button" class="mmb-pill" data-ed="close">ยกเลิก</button>
+        <button type="button" class="mmb-pill" data-ed="close">${t('cancel')}</button>
         <button type="button" class="mmb-pill primary" data-ed="save">Save to Card</button>
       </div>
     </div>`;
@@ -1122,21 +1268,21 @@ function openEditor() {
   };
 
   const renderRows = () => {
-    rowsEl.innerHTML = draft.length ? draft.map((t, i) => `
+    rowsEl.innerHTML = draft.length ? draft.map((tr, i) => `
       <div class="mmb-ed-row" data-i="${i}">
         <div class="mmb-ed-num">${String(i + 1).padStart(2, '0')}</div>
         <div class="mmb-ed-fields">
-          <input type="text" data-f="title" placeholder="ชื่อเพลง" value="${esc(t.title)}">
-          <input type="text" data-f="artist" placeholder="ศิลปิน (ไม่ใส่ก็ได้)" value="${esc(t.artist)}">
-          <input type="url" data-f="url" placeholder="https://… ลิงก์ไฟล์เสียงตรง" value="${esc(t.url)}">
+          <input type="text" data-f="title" placeholder="${esc(t('titlePh'))}" value="${esc(tr.title)}">
+          <input type="text" data-f="artist" placeholder="${esc(t('artistPh'))}" value="${esc(tr.artist)}">
+          <input type="url" data-f="url" placeholder="${esc(t('urlPh'))}" value="${esc(tr.url)}">
         </div>
         <div class="mmb-ed-move">
-          <button type="button" class="mmb-ghost" data-ed="up" title="ขึ้น"${i === 0 ? ' disabled' : ''}>${ICON.up}</button>
-          <button type="button" class="mmb-ghost" data-ed="down" title="ลง"${i === draft.length - 1 ? ' disabled' : ''}>${ICON.down}</button>
-          <button type="button" class="mmb-ghost danger" data-ed="del" title="ลบ">${ICON.trash}</button>
+          <button type="button" class="mmb-ghost" data-ed="up" title="${t('moveUp')}"${i === 0 ? ' disabled' : ''}>${ICON.up}</button>
+          <button type="button" class="mmb-ghost" data-ed="down" title="${t('moveDown')}"${i === draft.length - 1 ? ' disabled' : ''}>${ICON.down}</button>
+          <button type="button" class="mmb-ghost danger" data-ed="del" title="${t('remove')}">${ICON.trash}</button>
         </div>
       </div>`).join('')
-      : '<div class="mmb-empty">ยังไม่มีเพลง</div>';
+      : `<div class="mmb-empty">${t('noSongs')}</div>`;
   };
 
   rowsEl.addEventListener('input', (e) => {
@@ -1159,9 +1305,9 @@ function openEditor() {
         if (typeof json.theme === 'string' && allThemes()[json.theme]) themeSel.value = json.theme;
       }
       renderRows();
-      toast('success', `เพิ่ม ${tracks.length} เพลงจากไฟล์แล้ว (กด Save to Card เพื่อบันทึก)`);
+      toast('success', t('importedSongs', { n: tracks.length }));
     } catch (e) {
-      toast('error', 'อ่านไฟล์ไม่ได้ ต้องเป็น JSON ที่มี tracks');
+      toast('error', t('badPlaylistFile'));
     }
     fileInput.value = '';
   });
@@ -1192,7 +1338,7 @@ function openEditor() {
         const bar = line.lastIndexOf('|');
         return bar > -1 ? { title: line.slice(0, bar).trim(), artist: '', url: line.slice(bar + 1).trim() } : { title: '', artist: '', url: line };
       }).filter((t) => /^https?:\/\//i.test(t.url));
-      if (!added.length) { toast('warning', 'ใส่แบบ ชื่อเพลง | ลิงก์ ทีละบรรทัด (ลิงก์ขึ้นต้นด้วย http)'); return; }
+      if (!added.length) { toast('warning', t('bulkFormat')); return; }
       added.forEach((t) => { if (!t.title) t.title = titleFromUrl(t.url); });
       draft.push(...added);
       ta.value = '';
@@ -1205,17 +1351,17 @@ function openEditor() {
     }
     else if (act === 'save') {
       const bad = draft.filter((t) => t.url && !/^(https?:\/\/|\/|\.\/)/i.test(t.url.trim()));
-      if (bad.length) { toast('warning', 'มีลิงก์ที่ไม่ได้ขึ้นต้นด้วย http/https'); return; }
+      if (bad.length) { toast('warning', t('badLinks')); return; }
       const tracks = cleanTracks(draft);
       b.disabled = true;
       try {
         await writeCard({ version: 2, tag: tagInp.value.trim() || undefined, sign: signInp.value.trim() || undefined, theme: resolveThemeForCard(), tracks });
-        toast('success', `บันทึก ${tracks.length} เพลงลงการ์ด ${char.name} แล้ว`);
+        toast('success', t('savedCard', { n: tracks.length, name: char.name }));
         close();
         syncWithChat();
       } catch (err) {
         console.error(`[${MODULE}]`, err);
-        toast('error', `บันทึกไม่สำเร็จ: ${err.message || err}`);
+        toast('error', t('saveFailed', { err: err.message || err }));
         b.disabled = false;
       }
     }
@@ -1269,10 +1415,10 @@ function starterThemeJson() {
 /** Check the text; returns { theme, raw } or { error }. */
 function parseThemeText(text) {
   let raw;
-  try { raw = JSON.parse(text); } catch (e) { return { error: `JSON ไม่ถูกต้อง: ${e.message}` }; }
-  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return { error: 'ต้องเป็น { … } หนึ่งธีม' };
+  try { raw = JSON.parse(text); } catch (e) { return { error: t('badJson', { err: e.message }) }; }
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return { error: t('oneThemeOnly') };
   const theme = normalizeTheme(raw);
-  if (!theme) return { error: 'อ่านธีมไม่ได้' };
+  if (!theme) return { error: t('badTheme') };
   return { theme, raw };
 }
 
@@ -1285,8 +1431,8 @@ async function openThemeEditor(id) {
   const wrap = document.createElement('div');
   wrap.className = 'mmb-json-editor';
   wrap.innerHTML = `
-    <h3>${editing ? `แก้ไขธีม: ${esc(s.customThemes[id].name)}` : 'สร้างธีมใหม่'}</h3>
-    <p class="mmb-json-hint">กรอกเฉพาะช่องที่อยากเปลี่ยน ช่องที่เว้นว่าง ("") จะใช้ค่าพื้นฐาน · ความหมายแต่ละค่าดูใน THEME-GUIDE.md · ตัดแขนเข็ม "stylus": false</p>
+    <h3>${editing ? esc(t('editThemeH', { name: s.customThemes[id].name })) : t('newThemeH')}</h3>
+    <p class="mmb-json-hint">${esc(t('themeHint'))}</p>
     <textarea class="text_pole mmb-json-text" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
     <div class="mmb-json-error" hidden></div>`;
   const ta = wrap.querySelector('textarea');
@@ -1301,7 +1447,7 @@ async function openThemeEditor(id) {
     s.customThemes[newId] = res.theme;
     s.theme = newId;
     save(); applyTheme(); syncSettingsUI();
-    toast('success', editing ? `บันทึกธีม ${res.theme.name} แล้ว` : `สร้างธีม ${res.theme.name} แล้ว`);
+    toast('success', t(editing ? 'themeSaved' : 'themeCreated', { name: res.theme.name }));
     return true;
   };
 
@@ -1415,17 +1561,17 @@ function mountSettings() {
   };
   onTap('mmb-set-new', () => openThemeEditor(null));
   onTap('mmb-set-edit', () => {
-    if (BUILTIN_THEMES[s.theme]) { toast('info', 'ธีมตั้งต้นแก้ไม่ได้ กด + เพื่อสร้างธีมใหม่'); return; }
+    if (BUILTIN_THEMES[s.theme]) { toast('info', t('builtinNoEdit')); return; }
     openThemeEditor(s.theme);
   });
   onTap('mmb-set-delete', async () => {
-    if (BUILTIN_THEMES[s.theme]) { toast('info', 'ธีมตั้งต้นลบไม่ได้'); return; }
+    if (BUILTIN_THEMES[s.theme]) { toast('info', t('builtinNoDelete')); return; }
     const name = (s.customThemes[s.theme] || {}).name || s.theme;
-    if (!(await confirmBox(`ลบธีม "${name}" ?`))) return;
+    if (!(await confirmBox(t('confirmDelete', { name })))) return;
     delete s.customThemes[s.theme];
     s.theme = DEFAULT_THEME;
     save(); applyTheme(); syncSettingsUI();
-    toast('success', `ลบธีม ${name} แล้ว`);
+    toast('success', t('themeDeleted', { name }));
   });
   onTap('mmb-set-import', () => $('mmb-set-file').click());
   onTap('mmb-set-export', () => {
@@ -1450,9 +1596,9 @@ function mountSettings() {
       if (!last) throw new Error('no theme');
       s.theme = last;
       save(); applyTheme(); syncSettingsUI();
-      toast('success', `เพิ่มธีม ${s.customThemes[last].name} แล้ว`);
+      toast('success', t('themeAdded', { name: s.customThemes[last].name }));
     } catch (err) {
-      toast('error', 'อ่านไฟล์ธีมไม่ได้');
+      toast('error', t('badThemeFile'));
     }
     e.target.value = '';
   });
@@ -1500,7 +1646,7 @@ function boot() {
     applyEnabled(); // button first, so a settings-panel problem can't hide it
   } catch (err) {
     console.error(`[${MODULE}] failed to mount player`, err);
-    toast('error', `โหลดปุ่มไม่สำเร็จ: ${err.message || err}`);
+    toast('error', t('loadFailed', { err: err.message || err }));
   }
   try { mountSettings(); } catch (err) { console.error(`[${MODULE}] settings panel`, err); }
   try { syncWithChat(); } catch (err) { console.error(`[${MODULE}] sync`, err); }

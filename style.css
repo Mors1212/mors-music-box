@@ -773,3 +773,18 @@
   border: 1px solid var(--SmartThemeBorderColor, #444);
 }
 .mmb-json-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+
+/* language switch (TH / EN), left of the palette */
+.mmb-lang-btn {
+  font-family: var(--mmb-f-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  -webkit-user-select: none;
+  user-select: none;
+}
+/* four buttons in the top bar now: keep the brand from touching them */
+.mmb-topbar { gap: 8px; }
+.mmb-brand { letter-spacing: .2em; overflow: hidden; text-overflow: clip; min-width: 0; }
+.mmb-topbtns { flex: none; gap: 0; }
+.mmb-topbtns .mmb-ghost { width: 33px; }
