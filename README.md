@@ -80,7 +80,7 @@ You can create your own theme without leaving SillyTavern: tap **+** in the pane
 * the record (use your own picture, hide the grooves or the avatar)
 * the tone arm (remove it or replace it with your own picture)
 
-Full reference with a labelled diagram: **[THEME-GUIDE.md](THEME-GUIDE.md)** or **[THEME-GUIDE-TH.md](THEME-GUIDE.th.md)**
+Full reference with a labelled diagram: **[THEME-GUIDE.md](THEME-GUIDE.md)**
 
 Ready-made examples to import: **[theme-samples/](theme-samples)**
 
