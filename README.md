@@ -1,65 +1,115 @@
 # Mors's Music Box
 
-เครื่องเล่นเพลงแบบปุ่มลอยสำหรับ SillyTavern ที่เล่นเพลย์ลิสต์ประจำตัวบอทแต่ละตัว ลิสต์เพลงถูกเก็บไว้ในการ์ดบอท (`data.extensions.mors_music_box`) จึงติดไปกับไฟล์ PNG ตอน export และโมเดลไม่เห็น
+A floating music player for SillyTavern. Every bot carries its own playlist inside its character card, so the music travels with the bot.
 
-## ติดตั้ง
-- **จาก GitHub:** Extensions → Install extension → วางลิงก์ repo
-- **ด้วยมือ:** แตกโฟลเดอร์ `mors-music-box` ใส่ใน `public/scripts/extensions/third-party/` แล้วรีโหลด ST
+<img src="preview/09-themes.jpg" width="720">
 
-## ใช้งาน
-1. เปิดแชตกับบอท (ใช้กับแชตเดี่ยว ไม่รองรับแชตกลุ่ม)
-2. แตะปุ่ม ♪ ที่ลอยอยู่ (ลากย้ายได้) จะเปิดหน้าเพลย์ลิสต์ → แตะ ✎ มุมขวาบน
-3. ใส่ชื่อเพลงและลิงก์ไฟล์เสียงตรง หรือเปิด "วางหลายเพลงทีเดียว" แล้ววางทีละบรรทัดแบบ `ชื่อเพลง | ลิงก์`
-4. ใน "ตั้งค่าการ์ด" ใส่ป้าย (เช่น ISSUE 03), ข้อความลายมือ และธีมประจำการ์ดได้ → **Save to Card**
+> **Note:** Music Box plays audio files from links you provide. It does not stream from YouTube, Spotify or SoundCloud.
 
-## ลิงก์เพลง
-ต้องเป็นลิงก์ที่เปิดแล้วเป็นไฟล์เสียงทันที (mp3, ogg, m4a, wav)
-- ใช้ได้ดี: Catbox (`files.catbox.moe/…`), GitHub raw / jsDelivr
-- แปลงให้อัตโนมัติ: ลิงก์ Dropbox, GitHub `/blob/`, Google Drive `/file/d/…` (Drive อาจไม่เสถียรกับไฟล์ใหญ่)
-- ใช้ไม่ได้: YouTube, Spotify, SoundCloud
+## ✨ Features
 
-## ธีม
-ตั้งต้น: **Rose** · Elegant · Midnight
-- สลับเร็ว ๆ: แตะปุ่มจานสีในหน้าเพลย์ลิสต์ · กดค้างเพื่อเปิดรายการธีม
-- เพิ่มธีมเอง: Extensions → Mors's Music Box → **Import ธีม** (ไฟล์ JSON)
-- ทำธีมใหม่ง่ายสุด: กด **Export ธีมนี้** แล้วเอาไฟล์ไปแก้สี/ฟอนต์
+* **Floating Button:** A small ♪ button that sits over your chat. Drag it anywhere; it turns into a little equalizer while music is playing. Built for phones first, works on desktop too.
 
-```json
-{
-  "name": "Prussian Night",
-  "colors": {
-    "screen": "#121826", "frame": "#0b0f17", "text": "#ece4d4", "muted": "#8f8778", "soft": "#a59d8e",
-    "accent": "#c9a96e", "track": "#2c3650", "play": "#c9a96e", "playIcon": "#121826",
-    "vinyl": "#0a0a0a", "groove": "#1d1d1d", "stylus": "#a88452", "stylusKnob": "#c9a96e",
-    "row": "rgba(201,169,110,0.08)", "button": "#0d1119", "buttonIcon": "#c9a96e"
-  },
-  "fonts": { "tag": "Cinzel", "title": "Cormorant Garamond", "body": "DM Sans", "sign": "La Belle Aurore" },
-  "texture": "paper"
-}
-```
-- ไม่ใส่ค่าไหน จะใช้ค่าพื้นฐานแทน
-- `fonts` ใส่ชื่อฟอนต์จาก Google Fonts ได้ จะโหลดให้อัตโนมัติ
-- `texture`: `paper`, `paper-light`, `paper-dark`, `none` หรือลิงก์รูป https (ปูซ้ำเป็นลาย)
-- ถ้าการ์ดกำหนดธีมไว้และเปิด "Use the character's theme" จะใช้ธีมของการ์ด ธีมที่ Import มาเองจะถูกฝังลงการ์ดตอนเลือกเป็นธีมประจำการ์ด
+<img src="preview/01-button.jpg" width="260">
 
-### ส่วนเสริม (ใส่หรือไม่ใส่ก็ได้)
-```json
-{
-  "colors": { "line": "#c9a7ff" },
-  "background": "https://…/bg.jpg",
-  "disc": { "image": "https://…/disc.png", "grooves": false, "label": true },
-  "stylus": { "image": "https://…/arm.png", "width": 70, "height": 140, "top": -40, "right": -30 }
-}
-```
-- `colors.line` สีเส้นคั่นในลิสต์และหน้าแก้เพลย์ลิสต์ (ไม่ใส่ = ใช้สี `track`)
-- `background` รูปเต็มจอ (ยืดให้เต็ม) ถ้าอยากให้ปูซ้ำใช้ `{ "image": "…", "fit": "tile" }`
-- `disc.image` รูปแทนแผ่นเสียงสีดำ (แนะนำ PNG พื้นใส ทรงกลม) · `grooves` เปิด/ปิดลายร่องแผ่น (ใส่รูปแล้วจะปิดให้เอง) · `label: false` ซ่อนรูป avatar ตรงกลาง
-- `stylus: false` เอาแขนเข็มออก หรือใส่ `image` เป็นรูปแขนเข็มแบบของเราเอง ปรับขนาดและตำแหน่งเป็น px ได้ (หมุนจากขอบบนตรงกลางของรูป)
-- ลิงก์รูปต้องขึ้นต้นด้วย https หรือฝังรูปไว้ในไฟล์เป็น `data:image/…;base64,…` ก็ได้ (ไฟล์ธีมเดียวจบ ไม่ต้องฝากรูป)
+* **Playlist per Bot:** Songs are saved inside the character card itself. They come along when you export the card as a PNG, and they are never sent to the AI, so they don't cost any tokens.
 
-## อื่น ๆ
-- Import / Export JSON ในหน้าแก้เพลย์ลิสต์ ใช้ย้ายลิสต์ระหว่างบอทได้
-- มือถือ: ควบคุมจากหน้าจอล็อกได้ (Media Session)
-- "เล่นอัตโนมัติ" อาจโดนเบราว์เซอร์บล็อกจนกว่าจะแตะหน้าจอครั้งแรก
+<img src="preview/02-playlist.jpg" width="260">
 
-by Mors
+* **Vinyl Player:** The bot's avatar becomes the record label. Shuffle, previous, play/pause, next and repeat (all / one / off) sit in one row. You can also control playback from your phone's lock screen.
+
+<img src="preview/03-player.jpg" width="260">
+
+* **Themes:** Three built-in themes (**Rose**, **Elegant**, **Midnight**). Tap the palette button to switch, or press and hold it to pick from the list. You can also make your own (see [Themes](#-themes)).
+
+<img src="preview/04-theme-menu.jpg" width="260">
+
+* **Playlist Editor:** Add songs one by one, paste many at once, reorder them, and import or export the list as JSON. Each card can also set its own label, handwritten line and theme.
+
+<img src="preview/05-edit-playlist.jpg" width="260"> <img src="preview/06-card-settings.jpg" width="260">
+
+* **Smooth Track Changes:** Once the current song has finished downloading, the next one loads in the background, so it starts right away. On slow connections or Data Saver, this is skipped so it never competes with the song you're listening to.
+
+## 📦 Installation
+
+1. Open SillyTavern.
+2. Go to **Extensions → Install extension**.
+3. Paste this link and click **Install**:
+   ```
+   https://github.com/Mors1212/mors-music-box
+   ```
+4. Reload the page. The ♪ button appears in the bottom-right corner.
+
+To update later: **Extensions → Manage extensions → Update** next to Mors's Music Box.
+
+## 🎵 Adding Songs
+
+1. Open a chat with a bot (one-on-one chats only; group chats aren't supported).
+2. Tap the ♪ button, then the ✎ pencil in the top-right corner.
+3. Add songs:
+   * **One at a time:** tap **+ เพิ่มเพลง** (Add song) and fill in the title, artist (optional) and link.
+   * **Many at once:** open **วางหลายเพลงทีเดียว** (Paste many songs) and add one song per line:
+     ```
+     Waltz in A minor | https://files.catbox.moe/aaaa.mp3
+     Richmond Nocturne | https://files.catbox.moe/bbbb.mp3
+     ```
+4. *(Optional)* Under **ตั้งค่าการ์ด** (Card settings), set the label shown after "NOW PLAYING", the handwritten line under the controls, and a theme for this card.
+5. Tap **Save to Card**.
+
+> The player and playlist editor are currently in Thai. An English version is planned.
+
+### Which links work?
+
+The link must open the audio file directly (mp3, ogg, m4a or wav).
+
+| Works | Converted for you | Doesn't work |
+|---|---|---|
+| Catbox (`files.catbox.moe/…`) · GitHub raw · jsDelivr · OpenDrive | Dropbox share links · GitHub `/blob/` links · Google Drive `/file/d/…` links | YouTube · Spotify · SoundCloud · any page that isn't the file itself |
+
+Tip: smaller files (for example 128 kbps MP3) start faster on mobile data.
+
+## 🎨 Themes
+
+Pick a theme in the extension panel or with the palette button in the player.
+
+You can create your own theme without leaving SillyTavern: tap **+** in the panel and fill in a JSON template. Every setting is listed with a blank value, so you only fill in what you want to change. Themes can change:
+
+* every colour (screen, frame, text, buttons, divider lines, the "now playing" bar…)
+* fonts (any Google Font)
+* a background picture, with an option to dim it so text stays readable
+* the record (use your own picture, hide the grooves or the avatar)
+* the tone arm (remove it or replace it with your own picture)
+
+Full reference with a labelled diagram: **[THEME-GUIDE.md](THEME-GUIDE.md)**
+Ready-made examples to import: **[theme-samples/](theme-samples)**
+
+If you choose an imported theme as a card's theme, the theme is saved into the card too, so anyone who loads the card sees it.
+
+## ⚙️ Settings
+
+Find these under **Extensions → Mors's Music Box**.
+
+<img src="preview/07-settings-panel.jpg" width="260"> <img src="preview/08-theme-editor.jpg" width="260">
+
+| Setting | What it does |
+|---|---|
+| **Enable Music Box** | Shows or hides the floating button. |
+| **Use the character's theme** | When a card has its own theme, use it. Turn off to always use your own pick. |
+| **Autoplay when opening a chat** | Starts the bot's playlist when you open its chat. Browsers may block this until you tap the screen once. |
+| **Theme** | Your default theme. |
+| ➕ | Create a new theme. |
+| ✏️ | Edit the selected theme. |
+| 📥 / 📤 | Import a theme file / export the selected theme. |
+| 💀 | Delete the selected theme. |
+| **Reset Position** | Moves the floating button back to the corner. |
+
+The built-in themes can't be edited or deleted. Tap ➕ to make your own version instead.
+
+## ❓ Troubleshooting
+
+* **A song won't play:** the link probably isn't a direct file link. Open it in your browser; it should start playing or downloading the audio, not show a web page.
+* **Autoplay doesn't start:** browsers block sound until you interact with the page. Tap ▶ once.
+* **The floating button is missing:** make sure **Enable Music Box** is on, then tap **Reset Position**.
+* **The pencil button is hidden:** the playlist editor only works in a one-on-one chat with a bot.
+
+
