@@ -1,4 +1,4 @@
-# ไกด์ทำธีม Mors's Music Box
+# Mors's Music Box — Theme Guide
 
 [English](THEME-GUIDE.md) · **ภาษาไทย**
 
